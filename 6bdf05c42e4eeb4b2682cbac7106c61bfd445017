@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f4b4407_ddd0055c",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-11-01T19:58:24Z",
+      "side": 1,
+      "message": "gs101",
+      "revId": "6bdf05c42e4eeb4b2682cbac7106c61bfd445017",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4db94717_94586478",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-11-01T19:58:24Z",
+      "side": 1,
+      "message": "This is why I always upload this commit using `git review`",
+      "revId": "6bdf05c42e4eeb4b2682cbac7106c61bfd445017",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    }
+  ]
+}
