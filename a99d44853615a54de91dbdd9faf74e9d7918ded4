@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7867e3f8_068df327",
+        "filename": "build_slider.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-11-01T19:59:15Z",
+      "side": 1,
+      "message": "May have to change this if we manage to unify GKI but that\u0027s for another day.",
+      "revId": "a99d44853615a54de91dbdd9faf74e9d7918ded4",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    }
+  ]
+}
