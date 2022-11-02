@@ -27,6 +27,8 @@ arch/arm64/boot/${KERNEL_BINARY}
 "
 fi
 
+USES_VENDOR_BOOT_IMG=1
+
 ABI_DEFINITION=android/abi_gki_aarch64_generic.xml
 TIDY_ABI=1
 KMI_SYMBOL_LIST=android/abi_gki_aarch64_generic
