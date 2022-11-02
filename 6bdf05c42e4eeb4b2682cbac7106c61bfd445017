@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4c18c15f_79d6ea41",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2022-11-02T16:24:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f4b4407_ddd0055c",
+      "revId": "6bdf05c42e4eeb4b2682cbac7106c61bfd445017",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4db94717_94586478",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
