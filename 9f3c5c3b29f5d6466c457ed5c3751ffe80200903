@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d75bffb_699d0b9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-11-09T20:47:36Z",
+      "side": 1,
+      "message": "Better commit message, and perhaps script the changes to make it easier in the future.",
+      "revId": "9f3c5c3b29f5d6466c457ed5c3751ffe80200903",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    }
+  ]
+}
