@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: GPL-2.0
 #!/bin/bash
 
+readonly script_path="$(cd "$(dirname "$(realpath "$0")")";pwd -P)"
+
 function usage {
   echo "USAGE: $0 [-p|--prepare-aosp-abi BUG_NUMBER [-c|--continue] [--change-id CHANGE_ID]]"
   echo
@@ -52,7 +54,7 @@ function verify_aosp_tree {
     return
   fi
 
-  pushd aosp >/dev/null
+  pushd gs101/aosp >/dev/null
     if ! git diff --quiet HEAD; then
       exit_if_error 1 \
         "Found uncommitted changes in aosp/. Commit your changes before updating the ABI"
@@ -85,7 +87,7 @@ function update_aosp_abi {
   local pixel_symbol_list="android/abi_gki_aarch64_generic"
 
   # Rebase to aosp/android13-5.10 ToT before updating the ABI
-  pushd aosp/ >/dev/null
+  pushd gs101/aosp/ >/dev/null
     if [ "${CONTINUE_AFTER_REBASE}" = "0" ]; then
       git checkout -b ${FOR_AOSP_PUSH_BRANCH}
     fi
@@ -118,11 +120,11 @@ function update_aosp_abi {
   # cat'ing the private/gs-google/ and ToT aosp/ symbol lists together when
   # preparing for the AOSP ABI update. This retains all symbols in the aosp
   # version of the pixel symbol list.
-  git -C aosp show aosp/android13-5.10:"${pixel_symbol_list}" \
-    > aosp/android/abi_gki_aarch64_generic
-  extract_pixel_symbols 0 "private/gs-google/${pixel_symbol_list}"
-  merge_and_sort_symbol_lists "aosp/${pixel_symbol_list}" \
-    "private/gs-google/${pixel_symbol_list}"
+  git -C gs101/aosp show aosp/android13-5.10:"${pixel_symbol_list}" \
+    > gs101/aosp/android/abi_gki_aarch64_generic
+  extract_pixel_symbols 0 "gs101/private/gs-google/${pixel_symbol_list}"
+  merge_and_sort_symbol_lists "gs101/aosp/${pixel_symbol_list}" \
+    "gs101/private/gs-google/${pixel_symbol_list}"
 
   # Create the symbol list commit and check if the ABI xml needs to be updated
   COMMIT_TEXT=$(mktemp -t abi_sym_commit_text.XXXXX)
@@ -134,7 +136,7 @@ function update_aosp_abi {
   if [ -n "${CHANGE_ID}" ]; then
     echo "Change-Id: ${CHANGE_ID}" >> ${COMMIT_TEXT}
   fi
-  git -C aosp commit -s -F ${COMMIT_TEXT} -- android/
+  git -C gs101/aosp commit -s -F ${COMMIT_TEXT} -- android/
   commit_ret=$?
   rm -f ${COMMIT_TEXT}
 
@@ -145,13 +147,13 @@ function update_aosp_abi {
     # Update the AOSP ABI xml now
     rm -rf ${out_dir}
     OUT_DIR=${out_dir} \
-      BUILD_CONFIG=aosp/build.config.gki.aarch64 \
+      BUILD_CONFIG=gs101/aosp/build.config.gki.aarch64 \
       SKIP_CP_KERNEL_HDR=1 \
       LTO=full \
       DIST_DIR= \
       KBUILD_MIXED_TREE= \
       SKIP_MRPROPER= \
-      build/build_abi.sh --update "$@"
+      "${script_path}build/build_abi.sh" --update "$@"
     # TODO: How do I know if the build failed or the ABI xml was updated??
 
     # Create the git ABI xml commit for aosp/android13-5.10 if needed
@@ -160,7 +162,7 @@ function update_aosp_abi {
         # The ACK team requires the symbol list and xml changes to be committed
         # in a single patch. So reset the git repo to drop the symbol list
         # commit we made above.
-        git -C aosp reset HEAD~1
+        git -C gs101/aosp reset HEAD~1
       fi
 
       COMMIT_TEXT=$(mktemp -t abi_xml_commit_text.XXXXX)
@@ -172,14 +174,14 @@ function update_aosp_abi {
       if [ -n "${CHANGE_ID}" ]; then
         echo "Change-Id: ${CHANGE_ID}" >> ${COMMIT_TEXT}
       fi
-      git -C aosp commit -s -F ${COMMIT_TEXT} -- android/
+      git -C gs101/aosp commit -s -F ${COMMIT_TEXT} -- android/
       commit_ret=$?
       rm -f ${COMMIT_TEXT}
     fi
   fi
 
   echo "========================================================"
-  if ! git -C aosp diff --quiet aosp/android13-5.10..HEAD; then
+  if ! git -C gs101/aosp diff --quiet aosp/android13-5.10..HEAD; then
     if [ "${commit_ret}" = "0" ]; then
       if [ -n "${FOR_AOSP_PUSH_BRANCH}" ]; then
         echo " An ABI commit in aosp/ was created for you on the branch ${FOR_AOSP_PUSH_BRANCH}."
@@ -209,7 +211,7 @@ function update_aosp_abi {
 
   # Rollback to the original branch/commit
   if [ -n "${AOSP_CUR_BRANCH_OR_SHA1}" ]; then
-    git -C aosp checkout ${AOSP_CUR_BRANCH_OR_SHA1}
+    git -C gs101/aosp checkout ${AOSP_CUR_BRANCH_OR_SHA1}
   fi
 }
 
@@ -222,7 +224,7 @@ function update_aosp_abi {
 function extract_pixel_symbols {
   echo "========================================================"
   echo " Extracting symbols and updating the symbol list"
-  local clang_version=$(. private/gs-google/build.config.constants && \
+  local clang_version=$(. gs101/private/gs-google/build.config.constants && \
     echo $CLANG_VERSION)
   local clang_prebuilt_bin=prebuilts/clang/host/linux-x86/clang-${clang_version}/bin
   local additions_only=$1
@@ -241,11 +243,11 @@ function extract_pixel_symbols {
       --symbol-list ${pixel_symbol_list} \
       --skip-module-grouping             \
       ${ADD_ONLY_FLAG}                   \
-      ${BASE_OUT}/device-kernel/private
+      ${BASE_OUT}/device-kernel/gs101/private
   exit_if_error $? "Failed to extract symbols!"
 
   # Strip the core ABI symbols from the pixel symbol list
-  grep "^ " aosp/android/abi_gki_aarch64_core | while read l; do
+  grep "^ " gs101/aosp/android/abi_gki_aarch64_core | while read l; do
     sed -i "/\<$l\>/d" ${pixel_symbol_list}
   done
 
@@ -260,7 +262,7 @@ function extract_pixel_symbols {
 function verify_new_symbols_require_abi_update {
   local pixel_symbol_list=$1
 
-  pushd aosp/ >/dev/null
+  pushd gs101/aosp/ >/dev/null
     git diff --name-only aosp/android13-5.10..HEAD | grep -v "\<${pixel_symbol_list}\>"
     err=$?
     if [ "${err}" = "0" ]; then
@@ -289,7 +291,7 @@ function verify_new_symbols_require_abi_update {
 export SKIP_MRPROPER=1
 export BASE_OUT=${OUT_DIR:-out}/mixed/
 export DIST_DIR=${DIST_DIR:-${BASE_OUT}/dist/}
-VMLINUX_TMP=${BASE_OUT}/device-kernel/private/vmlinux
+VMLINUX_TMP=${BASE_OUT}/device-kernel/gs101/private/vmlinux
 # Use mktemp -u to create a random branch name
 FOR_AOSP_PUSH_BRANCH="update_symbol_list-delete-after-push"
 PREPARE_AOSP_ABI=${PREPARE_AOSP_ABI:-0}
@@ -342,16 +344,16 @@ fi
 verify_aosp_tree
 
 if [ "${CONTINUE_AFTER_REBASE}" = "0" ]; then
-  BUILD_KERNEL=1 TRIM_NONLISTED_KMI=0 ENABLE_STRICT_KMI=0 ./build_slider.sh "$@"
+  BUILD_KERNEL=1 TRIM_NONLISTED_KMI=0 ENABLE_STRICT_KMI=0 "${script_path}/build_slider.sh" "$@"
   exit_if_error $? "Failed to run ./build_slider.sh!"
 fi
 
 if [ "${PREPARE_AOSP_ABI}" != "0" ]; then
   update_aosp_abi "$@"
 else
-  extract_pixel_symbols 1 "private/gs-google/android/abi_gki_aarch64_generic"
-  merge_and_sort_symbol_lists "aosp/android/abi_gki_aarch64_generic" \
-    "private/gs-google/android/abi_gki_aarch64_generic"
+  extract_pixel_symbols 1 "gs101/private/gs-google/android/abi_gki_aarch64_generic"
+  merge_and_sort_symbol_lists "gs101/aosp/android/abi_gki_aarch64_generic" \
+    "gs101/private/gs-google/android/abi_gki_aarch64_generic"
 
   echo "========================================================"
   echo " The symbol list has been updated locally in aosp/ and private/gs-google."
