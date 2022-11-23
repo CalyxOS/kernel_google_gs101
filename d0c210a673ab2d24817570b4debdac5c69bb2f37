@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "432057b8_f852e5de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-11-23T21:43:53Z",
+      "side": 1,
+      "message": "If turning this off here *could* interfere with debugging / other things for users who don\u0027t use this feature, then I wish it could be avoided somehow. Is there any reasonable way to store and access a configuration variable for this? It might sound over-the-top, but I\u0027m biased as someone who doesn\u0027t use Restrict USB.",
+      "revId": "d0c210a673ab2d24817570b4debdac5c69bb2f37",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    }
+  ]
+}
