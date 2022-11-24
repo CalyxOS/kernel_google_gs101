@@ -16,6 +16,24 @@
       "message": "If turning this off here *could* interfere with debugging / other things for users who don\u0027t use this feature, then I wish it could be avoided somehow. Is there any reasonable way to store and access a configuration variable for this? It might sound over-the-top, but I\u0027m biased as someone who doesn\u0027t use Restrict USB.",
       "revId": "d0c210a673ab2d24817570b4debdac5c69bb2f37",
       "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b834d64_51bc7348",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-11-24T20:23:35Z",
+      "side": 1,
+      "message": "In theory we could have different kernels, but then we don\u0027t test production kernels which is also bad.\n\nThis might be something that may not be feasible at all.",
+      "parentUuid": "432057b8_f852e5de",
+      "revId": "d0c210a673ab2d24817570b4debdac5c69bb2f37",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
     }
   ]
 }
