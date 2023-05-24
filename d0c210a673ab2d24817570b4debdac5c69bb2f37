@@ -34,6 +34,24 @@
       "parentUuid": "432057b8_f852e5de",
       "revId": "d0c210a673ab2d24817570b4debdac5c69bb2f37",
       "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a54a8c83_c2770585",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-05-24T23:13:40Z",
+      "side": 1,
+      "message": "I\u0027m fine with the `on early-init` since in our testing it\u0027s quite early in the boot process, a few seconds difference but that\u0027s so much easier to manage compared to this.",
+      "parentUuid": "0b834d64_51bc7348",
+      "revId": "d0c210a673ab2d24817570b4debdac5c69bb2f37",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
     }
   ]
 }
