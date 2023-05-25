@@ -52,6 +52,24 @@
       "parentUuid": "0b834d64_51bc7348",
       "revId": "d0c210a673ab2d24817570b4debdac5c69bb2f37",
       "serverId": "35266860-6252-469c-a67d-185064479fc0"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6b64a04_17cc573b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2023-05-25T12:20:36Z",
+      "side": 1,
+      "message": "And also in testing so far, the `on early-init` method has always been early enough that it is before any USB devices are detected for data transfer anyway (i.e. no kernel messages acknowledging a USB device\u0027s presence), which *should* mean no functional difference at all in terms of addressing the issue.",
+      "parentUuid": "a54a8c83_c2770585",
+      "revId": "d0c210a673ab2d24817570b4debdac5c69bb2f37",
+      "serverId": "35266860-6252-469c-a67d-185064479fc0"
     }
   ]
 }
